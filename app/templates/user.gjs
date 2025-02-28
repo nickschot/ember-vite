@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
 import { task } from 'ember-concurrency';
 
-let updateData = modifier((element, [fetchCommentsTask, user]) => {
+const updateData = modifier((element, [fetchCommentsTask, user]) => {
   fetchCommentsTask.perform(user);
 });
 
