@@ -1,7 +1,9 @@
 {{page-title "EmberVite"}}
 
+<h1>My App</h1>
+
 {{outlet}}
 
-{{! The following component displays Ember's default welcome message. }}
-<WelcomePage />
-{{! Feel free to remove this! }}
+
+<LinkTo @route="user" @model="abel">Abel</LinkTo>
+<LinkTo @route="user" @model="bart">Bart</LinkTo>

@@ -34,6 +34,7 @@ module.exports = {
       },
     ],
     ...babelCompatSupport(),
+    'ember-concurrency/async-arrow-task-transform',
   ],
 
   generatorOpts: {
