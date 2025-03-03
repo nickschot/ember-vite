@@ -1,0 +1,32 @@
+name: lttf-dashboard
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'pnpm'
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10
+    - run: pnpm install
+    - run: npx lint-to-the-future output -o lttfOutput
+      shell: bash
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: lttf-dashboard
+        publish_dir: ./lttfOutput
+        destination_dir: ./
