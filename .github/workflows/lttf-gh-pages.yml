@@ -16,12 +16,11 @@ jobs:
           cache: 'pnpm'
       - uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          path: ./oldLttfOutput
+          path: artifacts
       - name: Display structure of downloaded files
         run: ls -R
       - run: pnpm install
-      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./oldLttfOutput/data.json --rootUrl ember-vite
+      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./artifacts/github-pages/data.json --rootUrl ember-vite
         shell: bash
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
