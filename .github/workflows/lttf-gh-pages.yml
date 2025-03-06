@@ -14,19 +14,30 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-      - uses: actions/download-artifact@v4
+      - name: Restore previous LTTF data
+        id: cache-lttf-restore
+        uses: actions/cache/restore@v4
         with:
-          path: artifacts
+          path: |
+            ./lttfOutput/data.json
+          key: ${{ runner.os }}-lttf
       - name: Display structure of downloaded files
         run: ls -R
       - run: pnpm install
-      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./artifacts/github-pages/data.json --rootUrl ember-vite
+      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./lttfOutput/data.json --rootUrl ember-vite
         shell: bash
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: lttfOutput/
           retention-days: 7
+      - name: Save LTTF data
+        id: cache-lttf-save
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ./lttfOutput/data.json
+          key: ${{ steps.cache-lttf-restore.outputs.cache-primary-key }}
 
   deploy:
     needs: build
