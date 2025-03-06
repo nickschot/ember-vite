@@ -9,35 +9,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: lttf-dashboard
+          sparse-checkout: |
+            data.json
+          path: previous-lttf-dashboard
+
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-      - name: Restore previous LTTF data
-        id: cache-lttf-restore
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ./lttfOutput/data.json
-          key: ${{ runner.os }}-lttf
-      - name: Display structure of downloaded files
-        run: ls -R
       - run: pnpm install
-      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./lttfOutput/data.json --rootUrl ember-vite
+      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./previous-lttf-dashboard/data.json --rootUrl ember-vite
         shell: bash
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: lttfOutput/
-          retention-days: 7
-      - name: Save LTTF data
-        id: cache-lttf-save
-        uses: actions/cache/save@v4
+          retention-days: 1
+      - name: Commit dashboard to branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: |
-            ./lttfOutput/data.json
-          key: ${{ steps.cache-lttf-restore.outputs.cache-primary-key }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: lttf-dashboard
+          publish_dir: ./lttfOutput
+          destination_dir: ./
 
   deploy:
     needs: build
