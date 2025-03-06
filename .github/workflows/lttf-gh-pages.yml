@@ -1,3 +1,5 @@
+name: Deploy Lint to the Future Dashboard
+
 on:
   push:
     branches:
