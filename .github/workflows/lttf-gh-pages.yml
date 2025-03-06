@@ -21,7 +21,7 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
       - run: pnpm install
-      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./oldLttfOutput/data.json
+      - run: pnpx lint-to-the-future output -o lttfOutput --previous-results ./oldLttfOutput/data.json --rootUrl ember-vite
         shell: bash
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
